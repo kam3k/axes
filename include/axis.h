@@ -1,14 +1,24 @@
+#ifndef UNIT_AXES_H
+#define UNIT_AXES_H
+
+#include <cmath>
 #include <Eigen/Dense>
 
 namespace axes
 {
+
+const double EPS = 1e-9;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// UnitAxis2D
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 class UnitAxis2D
 {
 public:
   // Constructors
   UnitAxis2D(double, double);
-  UnitAxis2D(double);
+  UnitAxis2D(double phi) : UnitAxis2D(std::cos(phi), std::sin(phi)) {}
   UnitAxis2D() : UnitAxis2D(1.0, 0.0) {}
   UnitAxis2D(const Eigen::Vector2d& v) : UnitAxis2D(v(0), v(1)) {}
   UnitAxis2D(const UnitAxis2D& orig) : lambda_(orig.lambda_), kappa_(orig.kappa_) {}
@@ -38,6 +48,10 @@ double       boxminus(const UnitAxis2D&, const UnitAxis2D&);
 UnitAxis2D   boxplus(const UnitAxis2D&, const Eigen::Vector2d&);
 double       distance(const UnitAxis2D&, const UnitAxis2D&);
 double       dot(const UnitAxis2D&, const UnitAxis2D&);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// UnitAxis3D
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 class UnitAxis3D
 {
@@ -79,3 +93,5 @@ double          dot(const UnitAxis3D&, const UnitAxis3D&);
 UnitAxis3D      exp(const Eigen::Vector2d&);
 
 } // namespace axes
+
+#endif
