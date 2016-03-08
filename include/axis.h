@@ -41,13 +41,15 @@ private:
 };
 
 // Functions acting on UnitAxis2D
-std::ostream &operator<<(std::ostream&, const UnitAxis2D&);
-bool         operator==(const UnitAxis2D&, const UnitAxis2D&);
-UnitAxis2D   operator+(const UnitAxis2D&, const UnitAxis2D&);
-double       boxminus(const UnitAxis2D&, const UnitAxis2D&);
-UnitAxis2D   boxplus(const UnitAxis2D&, const Eigen::Vector2d&);
-double       distance(const UnitAxis2D&, const UnitAxis2D&);
-double       dot(const UnitAxis2D&, const UnitAxis2D&);
+std::ostream& operator<<(std::ostream&, const UnitAxis2D&);
+bool          operator==(const UnitAxis2D&, const UnitAxis2D&);
+bool          operator!=(const UnitAxis2D&, const UnitAxis2D&);
+UnitAxis2D    operator+(const UnitAxis2D&, const UnitAxis2D&);
+UnitAxis2D    operator-(const UnitAxis2D&, const UnitAxis2D&);
+double        boxminus(const UnitAxis2D&, const UnitAxis2D&);
+UnitAxis2D    boxplus(const UnitAxis2D&, double phi);
+double        distance(const UnitAxis2D&, const UnitAxis2D&);
+double        dot(const UnitAxis2D&, const UnitAxis2D&);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // UnitAxis3D
@@ -85,6 +87,7 @@ private:
 // Functions acting on UnitAxis3D
 std::ostream    &operator<<(std::ostream&, const UnitAxis3D&);
 bool            operator==(const UnitAxis3D&, const UnitAxis3D&);
+bool            operator!=(const UnitAxis3D&, const UnitAxis3D&);
 UnitAxis3D      operator+(const UnitAxis3D&, const UnitAxis3D&);
 Eigen::Vector2d boxminus(const UnitAxis3D&, const UnitAxis3D&);
 UnitAxis3D      boxplus(const UnitAxis3D&, const Eigen::Vector3d&);
