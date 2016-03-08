@@ -64,7 +64,7 @@ public:
   Eigen::Matrix3d operator-() const;
   UnitAxis3D&     operator=(const UnitAxis3D&);
 private:
-  double lambda_;
+  double          lambda_;
   Eigen::Vector2d kappa_;
 };
 
