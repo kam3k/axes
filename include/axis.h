@@ -26,13 +26,13 @@ public:
   UnitAxis2D(const Vector v) : UnitAxis2D(v(0), v(1)) {}
   UnitAxis2D(const UnitAxis2D& orig) : lambda_(orig.lambda_), kappa_(orig.kappa_) {}
   // Introspection
-  T           angle() const;
-  T           kappa() const;
-  T           lambda() const;
-  Vector      vector() const;
+  T           angle() const {return std::atan(kappa_ / lambda_);}
+  T           kappa() const {return kappa_;}
+  T           lambda() const {return lambda_;}
+  Vector      vector() const {return Vector(lambda_, kappa_);}
   // Mathematical methods
-  UnitAxis2D  inv() const;
-  T           log() const;
+  UnitAxis2D  inv() const {return UnitAxis2D<T>(lambda_, -kappa_);}
+  T           log() const {return angle();}
   // Operators
   T           operator[](std::size_t) const;
   Matrix      operator+() const;
@@ -44,7 +44,7 @@ private:
   T           eps_ = std::numeric_limits<T>::epsilon();
 };
 
-// Constructors
+// Constructor
 
 template <typename T>
 UnitAxis2D<T>::UnitAxis2D(T lambda, T kappa)
@@ -72,46 +72,6 @@ UnitAxis2D<T>::UnitAxis2D(T lambda, T kappa)
     lambda_ = lambda;
     kappa_ = kappa;
   }
-}
-
-// Introspection
-
-template <typename T>
-T UnitAxis2D<T>::angle() const
-{
-  return std::atan(kappa_ / lambda_);
-}
-
-template <typename T>
-T UnitAxis2D<T>::kappa() const
-{
-  return kappa_;
-}
-
-template <typename T>
-T UnitAxis2D<T>::lambda() const
-{
-  return lambda_;
-}
-
-template <typename T>
-typename UnitAxis2D<T>::Vector UnitAxis2D<T>::vector() const
-{
-  return Vector(lambda_, kappa_);
-}
-
-// Mathematical Methods
-
-template <typename T>
-UnitAxis2D<T> UnitAxis2D<T>::inv() const
-{
-  return UnitAxis2D<T>(lambda_, -kappa_);
-}
-
-template <typename T>
-T UnitAxis2D<T>::log() const
-{
-  return angle();
 }
 
 // Operators
@@ -150,7 +110,7 @@ UnitAxis2D<T>& UnitAxis2D<T>::operator=(const UnitAxis2D<T>& rhs)
   return *this;
 }
 
-// Functions acting on UnitAxis2D
+// Non-member operators 
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const UnitAxis2D<T>& m)
@@ -189,6 +149,8 @@ double boxminus(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
 {
   return (n - m).log();
 }
+
+// Non-member functions
 
 template <typename T>
 UnitAxis2D<T> boxplus(const UnitAxis2D<T>& m, double phi)
