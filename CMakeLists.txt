@@ -17,7 +17,8 @@ file(GLOB SOURCES src/*.cpp)
 file(GLOB TEST_SOURCES test/*.cpp)
 
 # Add library
-add_library(axes SHARED ${SOURCES})
+add_library(axes INTERFACE)
+target_include_directories(axes INTERFACE include)
 
 # Setup Catch for testing
 add_library(Catch INTERFACE)
