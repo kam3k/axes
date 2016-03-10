@@ -2,43 +2,45 @@
 #include "axis.h"
 #include <iostream>
 
+using namespace axes;
+
 TEST_CASE("Constructors")
 {
 
   SECTION("Default constructor")
   {
-    axes::UnitAxis2D<double> m;
+    UnitAxis2D<double> m;
     REQUIRE(m.lambda() == 1.0);
     REQUIRE(m.kappa() == 0.0);
   }
 
   SECTION("Two parameter constructor")
   {
-    axes::UnitAxis2D<double> a(1.0, 0.0);
+    UnitAxis2D<double> a(1.0, 0.0);
     REQUIRE(a.lambda() == 1.0);
     REQUIRE(a.kappa() == 0.0);
 
-    axes::UnitAxis2D<double> b(2.0, 0.0);
+    UnitAxis2D<double> b(2.0, 0.0);
     REQUIRE(b.lambda() == 1.0);
     REQUIRE(b.kappa() == 0.0);
 
-    axes::UnitAxis2D<double> c(1.0, 1.0);
+    UnitAxis2D<double> c(1.0, 1.0);
     REQUIRE(c.lambda() == Approx(std::sqrt(2.0) / 2.0));
     REQUIRE(c.kappa() == Approx(std::sqrt(2.0) / 2.0));
 
-    axes::UnitAxis2D<double> d(-1.0, 1.0);
+    UnitAxis2D<double> d(-1.0, 1.0);
     REQUIRE(d.lambda() == Approx(std::sqrt(2.0) / 2.0));
     REQUIRE(d.kappa() == Approx(-std::sqrt(2.0) / 2.0));
 
-    axes::UnitAxis2D<double> e(1.0, -1.0);
+    UnitAxis2D<double> e(1.0, -1.0);
     REQUIRE(e.lambda() == Approx(std::sqrt(2.0) / 2.0));
     REQUIRE(e.kappa() == Approx(-std::sqrt(2.0) / 2.0));
 
-    axes::UnitAxis2D<double> f(0.0, 0.0);
+    UnitAxis2D<double> f(0.0, 0.0);
     REQUIRE(f.lambda() == 1.0);
     REQUIRE(f.kappa() == 0.0);
 
-    axes::UnitAxis2D<double> g(0.0, -1.0);
+    UnitAxis2D<double> g(0.0, -1.0);
     REQUIRE(g.lambda() == 0.0);
     REQUIRE(g.kappa() == 1.0);
   }
@@ -47,23 +49,23 @@ TEST_CASE("Constructors")
   {
     const long double pi = 3.141592653589793238462643383279502884L;
 
-    axes::UnitAxis2D<double> a(0.0);
+    UnitAxis2D<double> a(0.0);
     REQUIRE(a.lambda() == 1.0);
     REQUIRE(a.kappa() == 0.0);
 
-    axes::UnitAxis2D<double> b(pi);
+    UnitAxis2D<double> b(pi);
     REQUIRE(b.lambda() == Approx(1.0));
     REQUIRE(b.kappa() == Approx(0.0));
 
-    axes::UnitAxis2D<double> c(pi/2.0);
+    UnitAxis2D<double> c(pi/2.0);
     REQUIRE(c.lambda() == Approx(0.0));
     REQUIRE(c.kappa() == Approx(1.0));
 
-    axes::UnitAxis2D<double> d(pi/3.0);
+    UnitAxis2D<double> d(pi/3.0);
     REQUIRE(d.lambda() == Approx(0.5));
     REQUIRE(d.kappa() == Approx(std::sqrt(3.0) / 2.0));
 
-    axes::UnitAxis2D<double> e(3.0*pi/4.0);
+    UnitAxis2D<double> e(3.0*pi/4.0);
     REQUIRE(e.lambda() == Approx(std::sqrt(2.0) / 2.0));
     REQUIRE(e.kappa() == Approx(-std::sqrt(2.0) / 2.0));
   }
@@ -71,25 +73,25 @@ TEST_CASE("Constructors")
   SECTION("2-vector constructor")
   {
     Eigen::Vector2d u(1.0, 1.0);
-    axes::UnitAxis2D<double> a(u);
+    UnitAxis2D<double> a(u);
     REQUIRE(a.lambda() == Approx(std::sqrt(2.0) / 2.0));
     REQUIRE(a.kappa() == Approx(std::sqrt(2.0) / 2.0));
 
     Eigen::Vector2d v(0.0, 0.0);
-    axes::UnitAxis2D<double> b(v);
+    UnitAxis2D<double> b(v);
     REQUIRE(b.lambda() == 1.0);
     REQUIRE(b.kappa() == 0.0);
   }
 
   SECTION("Copy constructor")
   {
-    axes::UnitAxis2D<double> a(1.0, 1.0);
-    axes::UnitAxis2D<double> b(a);
+    UnitAxis2D<double> a(1.0, 1.0);
+    UnitAxis2D<double> b(a);
     REQUIRE(a.lambda() == b.lambda());
     REQUIRE(a.kappa() == b.kappa());
 
-    axes::UnitAxis2D<double> c(-1.0, 4.32);
-    axes::UnitAxis2D<double> d(c);
+    UnitAxis2D<double> c(-1.0, 4.32);
+    UnitAxis2D<double> d(c);
     REQUIRE(c.lambda() == d.lambda());
     REQUIRE(c.kappa() == d.kappa());
   }
@@ -99,9 +101,9 @@ TEST_CASE("Constructors")
 TEST_CASE("Introspection")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
-  axes::UnitAxis2D<double> m;
-  axes::UnitAxis2D<double> n(1.0, 1.0);
-  axes::UnitAxis2D<double> p(0.0, -1.0);
+  UnitAxis2D<double> m;
+  UnitAxis2D<double> n(1.0, 1.0);
+  UnitAxis2D<double> p(0.0, -1.0);
 
   SECTION("Angle")
   {
@@ -140,17 +142,17 @@ TEST_CASE("Introspection")
 TEST_CASE("Mathematical methods")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
-  axes::UnitAxis2D<double> m;
-  axes::UnitAxis2D<double> n(1.0, 1.0);
-  axes::UnitAxis2D<double> p(0.0, -1.0);
-  axes::UnitAxis2D<double> q(2.3, -3.7);
+  UnitAxis2D<double> m;
+  UnitAxis2D<double> n(1.0, 1.0);
+  UnitAxis2D<double> p(0.0, -1.0);
+  UnitAxis2D<double> q(2.3, -3.7);
 
   SECTION("Inv")
   {
-    REQUIRE(m.inv() == axes::UnitAxis2D<double>(1.0, 0.0));
-    REQUIRE(n.inv() == axes::UnitAxis2D<double>(1.0, -1.0));
-    REQUIRE(p.inv() == axes::UnitAxis2D<double>(0.0, 1.0));
-    REQUIRE(q.inv() == axes::UnitAxis2D<double>(2.3, 3.7));
+    REQUIRE(m.inv() == UnitAxis2D<double>(1.0, 0.0));
+    REQUIRE(n.inv() == UnitAxis2D<double>(1.0, -1.0));
+    REQUIRE(p.inv() == UnitAxis2D<double>(0.0, 1.0));
+    REQUIRE(q.inv() == UnitAxis2D<double>(2.3, 3.7));
   }
 
   SECTION("Log")
@@ -165,9 +167,9 @@ TEST_CASE("Mathematical methods")
 TEST_CASE("Operators")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
-  axes::UnitAxis2D<double> m;
-  axes::UnitAxis2D<double> n(1.0, 1.0);
-  axes::UnitAxis2D<double> p(0.0, -1.0);
+  UnitAxis2D<double> m;
+  UnitAxis2D<double> n(1.0, 1.0);
+  UnitAxis2D<double> p(0.0, -1.0);
 
   SECTION("Indexing")
   {
@@ -233,81 +235,126 @@ TEST_CASE("Operators")
 
   SECTION("Assignment")
   {
-    m = axes::UnitAxis2D<double>(4.3, -1.1);
-    n = axes::UnitAxis2D<double>(-1.3, -11.9);
-    p = axes::UnitAxis2D<double>(7.2, 4.8);
+    m = UnitAxis2D<double>(4.3, -1.1);
+    n = UnitAxis2D<double>(-1.3, -11.9);
+    p = UnitAxis2D<double>(7.2, 4.8);
 
-    REQUIRE(m == axes::UnitAxis2D<double>(4.3, -1.1));
-    REQUIRE(n == axes::UnitAxis2D<double>(-1.3, -11.9));
-    REQUIRE(p == axes::UnitAxis2D<double>(7.2, 4.8));
+    REQUIRE(m == UnitAxis2D<double>(4.3, -1.1));
+    REQUIRE(n == UnitAxis2D<double>(-1.3, -11.9));
+    REQUIRE(p == UnitAxis2D<double>(7.2, 4.8));
   }
 }
 
 TEST_CASE("Functions")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
-  axes::UnitAxis2D<double> m;
-  axes::UnitAxis2D<double> n(1.0, 1.0);
-  axes::UnitAxis2D<double> p(0.0, -1.0);
+  UnitAxis2D<double> m;
+  UnitAxis2D<double> n(1.0, 1.0);
+  UnitAxis2D<double> p(0.0, -1.0);
+  UnitAxis2D<double> q(std::sqrt(3.0)/2, 0.5);
+  UnitAxis2D<double> r(0.5, -std::sqrt(3.0)/2);
 
   SECTION("Equivalency operators")
   {
-    axes::UnitAxis2D<double> q;
-    axes::UnitAxis2D<double> r(1.0, 1.0);
-    axes::UnitAxis2D<double> s(0.0, -1.0);
+    UnitAxis2D<double> s;
+    UnitAxis2D<double> t(1.0, 1.0);
+    UnitAxis2D<double> u(0.0, -1.0);
 
     REQUIRE(m == m);
-    REQUIRE(m == q);
+    REQUIRE(m == s);
     REQUIRE(n == n);
-    REQUIRE(n == r);
+    REQUIRE(n == t);
     REQUIRE(p == p);
-    REQUIRE(p == s);
+    REQUIRE(p == u);
 
     REQUIRE(m != n);
     REQUIRE(m != p);
-    REQUIRE(m != r);
-    REQUIRE(m != s);
+    REQUIRE(m != t);
+    REQUIRE(m != u);
   }
 
   SECTION("Axis product")
   {
-    axes::UnitAxis2D<double> q(std::sqrt(3.0)/2, 0.5);
-    axes::UnitAxis2D<double> r(0.5, -std::sqrt(3.0)/2);
+    REQUIRE(+m * UnitAxis2D<double>() == m); 
+    REQUIRE(+n * UnitAxis2D<double>() == n); 
+    REQUIRE(+p * UnitAxis2D<double>() == p); 
+    REQUIRE(+q * q == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+    REQUIRE(+q * r == UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
+    REQUIRE(+r * q == UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
+    REQUIRE(+q * +r * q == UnitAxis2D<double>());
+    REQUIRE(+r * +q * q == UnitAxis2D<double>());
+    REQUIRE(+r * r == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
 
-    REQUIRE(+m * axes::UnitAxis2D<double>() == m); 
-    REQUIRE(+n * axes::UnitAxis2D<double>() == n); 
-    REQUIRE(+p * axes::UnitAxis2D<double>() == p); 
-    REQUIRE(+q * q == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
-    REQUIRE(+q * r == axes::UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
-    REQUIRE(+r * q == axes::UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
-    REQUIRE(+q * +r * q == axes::UnitAxis2D<double>());
-    REQUIRE(+r * +q * q == axes::UnitAxis2D<double>());
-    REQUIRE(+r * r == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
-
-    REQUIRE(-m * axes::UnitAxis2D<double>() == m.inv()); 
-    REQUIRE(-n * axes::UnitAxis2D<double>() == n.inv()); 
-    REQUIRE(-p * axes::UnitAxis2D<double>() == p.inv()); 
-    REQUIRE(-q * q == axes::UnitAxis2D<double>());
-    REQUIRE(-q * r == axes::UnitAxis2D<double>(0, 1));
-    REQUIRE(-r * q == axes::UnitAxis2D<double>(0, 1));
-    REQUIRE(-q * -r * q == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
-    REQUIRE(-r * -q * q == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
-    REQUIRE(-r * r == axes::UnitAxis2D<double>());
+    REQUIRE(-m * UnitAxis2D<double>() == m.inv()); 
+    REQUIRE(-n * UnitAxis2D<double>() == n.inv()); 
+    REQUIRE(-p * UnitAxis2D<double>() == p.inv()); 
+    REQUIRE(-q * q == UnitAxis2D<double>());
+    REQUIRE(-q * r == UnitAxis2D<double>(0, 1));
+    REQUIRE(-r * q == UnitAxis2D<double>(0, 1));
+    REQUIRE(-q * -r * q == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+    REQUIRE(-r * -q * q == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+    REQUIRE(-r * r == UnitAxis2D<double>());
   }
 
   SECTION("Boxminus")
   {
+    REQUIRE(boxminus(m, m) == Approx(0));
+    REQUIRE(boxminus(n, n) == Approx(0));
+    REQUIRE(boxminus(q, r) == Approx(pi/2));
+    REQUIRE(boxminus(r, q) == Approx(pi/2));
+    REQUIRE(boxminus(p, q) == Approx(pi/3));
+    REQUIRE(boxminus(q, p) == Approx(-pi/3));
+    REQUIRE(boxminus(n, r) == Approx(7*pi/12 - pi));
+    REQUIRE(boxminus(r, n) == Approx(-7*pi/12 + pi));
   }
 
   SECTION("Boxplus")
   {
+    REQUIRE(boxplus(m, 0.0) == m);
+    REQUIRE(boxplus(m, pi/4) == n);
+    REQUIRE(boxplus(m, -pi/3) == r);
+    REQUIRE(boxplus(q, -pi/2) == r);
+    REQUIRE(boxplus(r, pi/2) == q);
+  }
+
+  SECTION("Manifold axioms")
+  {
+    REQUIRE(boxplus(m, 0.0) == m);
+    REQUIRE(boxplus(r, boxminus(q, r)) == q);
+    REQUIRE(boxplus(n, boxminus(r, n)) == r);
+    REQUIRE(boxminus(boxplus(q, 0.55), q) == Approx(0.55));
+    REQUIRE(boxminus(boxplus(r, -0.32), r) == Approx(-0.32));
   }
 
   SECTION("Distance")
   {
+    REQUIRE(distance(m, n) == Approx(pi/4));
+    REQUIRE(distance(n, m) == Approx(pi/4));
+    REQUIRE(distance(q, r) == Approx(pi/2));
+    REQUIRE(distance(r, q) == Approx(pi/2));
+    REQUIRE(distance(m, m) == Approx(0));
+    REQUIRE(distance(n, n) == Approx(0));
+    REQUIRE(distance(q, r) == Approx(pi/2));
+    REQUIRE(distance(r, q) == Approx(pi/2));
+    REQUIRE(distance(p, q) == Approx(pi/3));
+    REQUIRE(distance(q, p) == Approx(pi/3));
+    REQUIRE(distance(n, r) == Approx(pi - 7*pi/12));
+    REQUIRE(distance(r, n) == Approx(pi - 7*pi/12));
   }
 
   SECTION("Dot")
   {
+    REQUIRE(dot(m, n) == Approx(std::cos(pi/4)));
+    REQUIRE(dot(n, m) == Approx(std::cos(pi/4)));
+    REQUIRE(dot(q, r) == Approx(std::cos(pi/2)));
+    REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
+    REQUIRE(dot(m, m) == Approx(std::cos(0)));
+    REQUIRE(dot(n, n) == Approx(std::cos(0)));
+    REQUIRE(dot(q, r) == Approx(std::cos(pi/2)));
+    REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
+    REQUIRE(dot(p, q) == Approx(std::cos(pi/3)));
+    REQUIRE(dot(q, p) == Approx(std::cos(pi/3)));
+    REQUIRE(dot(n, r) == Approx(std::cos(pi - 7*pi/12)));
+    REQUIRE(dot(r, n) == Approx(std::cos(pi - 7*pi/12)));
   }
 }

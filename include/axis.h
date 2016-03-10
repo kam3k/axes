@@ -141,7 +141,7 @@ UnitAxis2D<T> operator*(const typename UnitAxis2D<T>::Matrix& mat, const UnitAxi
 template <typename T>
 double boxminus(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
 {
-  return (n - m).log();
+  return (-n * m).log();
 }
 
 // Non-member functions
@@ -149,7 +149,7 @@ double boxminus(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
 template <typename T>
 UnitAxis2D<T> boxplus(const UnitAxis2D<T>& m, double phi)
 {
-  return UnitAxis2D<T>(m + UnitAxis2D<T>(phi));
+  return UnitAxis2D<T>(+m * UnitAxis2D<T>(phi));
 }
 
 template <typename T>
