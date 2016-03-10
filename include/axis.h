@@ -133,15 +133,9 @@ bool operator!=(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
 }
 
 template <typename T>
-UnitAxis2D<T> operator+(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
+UnitAxis2D<T> operator*(const typename UnitAxis2D<T>::Matrix& mat, const UnitAxis2D<T>& n)
 {
-  return UnitAxis2D<T>(+m * n.vector());
-}
-
-template <typename T>
-UnitAxis2D<T> operator-(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
-{
-  return UnitAxis2D<T>(-m * n.vector());
+  return UnitAxis2D<T>(mat * n.vector());
 }
 
 template <typename T>

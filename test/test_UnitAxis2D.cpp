@@ -1,5 +1,6 @@
 #include "catch.h"
 #include "axis.h"
+#include <iostream>
 
 TEST_CASE("Constructors")
 {
@@ -270,6 +271,28 @@ TEST_CASE("Functions")
 
   SECTION("Axis product")
   {
+    axes::UnitAxis2D<double> q(std::sqrt(3.0)/2, 0.5);
+    axes::UnitAxis2D<double> r(0.5, -std::sqrt(3.0)/2);
+
+    REQUIRE(+m * axes::UnitAxis2D<double>() == m); 
+    REQUIRE(+n * axes::UnitAxis2D<double>() == n); 
+    REQUIRE(+p * axes::UnitAxis2D<double>() == p); 
+    REQUIRE(+q * q == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+    REQUIRE(+q * r == axes::UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
+    REQUIRE(+r * q == axes::UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
+    REQUIRE(+q * +r * q == axes::UnitAxis2D<double>());
+    REQUIRE(+r * +q * q == axes::UnitAxis2D<double>());
+    REQUIRE(+r * r == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+
+    REQUIRE(-m * axes::UnitAxis2D<double>() == m.inv()); 
+    REQUIRE(-n * axes::UnitAxis2D<double>() == n.inv()); 
+    REQUIRE(-p * axes::UnitAxis2D<double>() == p.inv()); 
+    REQUIRE(-q * q == axes::UnitAxis2D<double>());
+    REQUIRE(-q * r == axes::UnitAxis2D<double>(0, 1));
+    REQUIRE(-r * q == axes::UnitAxis2D<double>(0, 1));
+    REQUIRE(-q * -r * q == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+    REQUIRE(-r * -q * q == axes::UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+    REQUIRE(-r * r == axes::UnitAxis2D<double>());
   }
 
   SECTION("Boxminus")
