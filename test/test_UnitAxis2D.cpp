@@ -1,5 +1,5 @@
 #include "catch.h"
-#include "axis.h"
+#include "axes.h"
 #include <iostream>
 
 using namespace axes;
