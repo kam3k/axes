@@ -247,7 +247,7 @@ TEST_CASE("Operators")
 
 TEST_CASE("Functions")
 {
-  const long double pi = 3.141592653589793238462643383279502884L;
+  const double pi = 3.141592653589793238462643383279502884;
   UnitAxis2D<double> m;
   UnitAxis2D<double> n(1.0, 1.0);
   UnitAxis2D<double> p(0.0, -1.0);

@@ -327,7 +327,7 @@ typename UnitAxis3D<Scalar>::Vector2 boxminus(const UnitAxis3D<Scalar>& m, const
 template <typename Scalar>
 UnitAxis3D<Scalar> boxplus(const UnitAxis3D<Scalar>& m, const typename UnitAxis3D<Scalar>::Vector2& phi)
 {
-  return UnitAxis2D<Scalar>(+m * UnitAxis2D<Scalar>(phi));
+  return UnitAxis3D<Scalar>(+m * UnitAxis3D<Scalar>(phi));
 }
 
 template <typename Scalar>
