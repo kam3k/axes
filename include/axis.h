@@ -12,42 +12,42 @@ namespace axes
 // UnitAxis2D
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename T>
+template <typename Scalar>
 class UnitAxis2D
 {
 public:
   // Typedefs
-  typedef Eigen::Matrix<T, 2, 1> Vector;
-  typedef Eigen::Matrix<T, 2, 2> Matrix;
+  typedef Eigen::Matrix<Scalar, 2, 1> Vector;
+  typedef Eigen::Matrix<Scalar, 2, 2> Matrix;
   // Constructors
-  UnitAxis2D(T, T);
-  UnitAxis2D(T phi) : UnitAxis2D(std::cos(phi), std::sin(phi)) {}
+  UnitAxis2D(Scalar, Scalar);
+  UnitAxis2D(Scalar phi) : UnitAxis2D(std::cos(phi), std::sin(phi)) {}
   UnitAxis2D() : UnitAxis2D(1, 0) {}
   UnitAxis2D(const Vector v) : UnitAxis2D(v(0), v(1)) {}
   UnitAxis2D(const UnitAxis2D& orig) : lambda_(orig.lambda_), kappa_(orig.kappa_) {}
   // Introspection
-  T           angle() const {return std::atan(kappa_ / lambda_);}
-  T           kappa() const {return kappa_;}
-  T           lambda() const {return lambda_;}
+  Scalar      angle() const {return std::atan(kappa_ / lambda_);}
+  Scalar      kappa() const {return kappa_;}
+  Scalar      lambda() const {return lambda_;}
   Vector      vector() const {return Vector(lambda_, kappa_);}
   // Mathematical methods
-  UnitAxis2D  inv() const {return UnitAxis2D<T>(lambda_, -kappa_);}
-  T           log() const {return angle();}
+  UnitAxis2D  inv() const {return UnitAxis2D<Scalar>(lambda_, -kappa_);}
+  Scalar      log() const {return angle();}
   // Operators
-  T           operator[](std::size_t) const;
+  Scalar      operator[](std::size_t) const;
   Matrix      operator+() const;
   Matrix      operator-() const;
   UnitAxis2D& operator=(const UnitAxis2D&);
 private:
-  T           lambda_;
-  T           kappa_;
-  T           eps_ = std::numeric_limits<T>::epsilon();
+  Scalar      lambda_;
+  Scalar      kappa_;
+  Scalar      eps_ = std::numeric_limits<Scalar>::epsilon();
 };
 
 // Constructor
 
-template <typename T>
-UnitAxis2D<T>::UnitAxis2D(T lambda, T kappa)
+template <typename Scalar>
+UnitAxis2D<Scalar>::UnitAxis2D(Scalar lambda, Scalar kappa)
 {
   // Very small values are exactly zero
   lambda = std::abs(lambda) < eps_ ? 0 : lambda;
@@ -60,10 +60,10 @@ UnitAxis2D<T>::UnitAxis2D(T lambda, T kappa)
   // Ensure if lambda = 0, kappa = 1 (note lambda would be exactly 0 at this point)
   kappa = lambda == 0 ? 1 : kappa;
   // Normalize parameters (if required)
-  double square_sum = lambda * lambda + kappa * kappa;
+  Scalar square_sum = lambda * lambda + kappa * kappa;
   if (std::abs(square_sum - 1) > eps_)
   {
-    double normalizer = std::sqrt(square_sum);
+    Scalar normalizer = std::sqrt(square_sum);
     lambda_ = lambda / normalizer;
     kappa_ = kappa / normalizer;
   }
@@ -76,34 +76,34 @@ UnitAxis2D<T>::UnitAxis2D(T lambda, T kappa)
 
 // Operators
 
-template <typename T>
-T UnitAxis2D<T>::operator[](std::size_t i) const
+template <typename Scalar>
+Scalar UnitAxis2D<Scalar>::operator[](std::size_t i) const
 {
   if (i != 0 && i != 1)
   {
-    throw std::out_of_range("UnitAxis2D<T>::operator[]");
+    throw std::out_of_range("UnitAxis2D<Scalar>::operator[]");
   }
   return i == 0 ? lambda_ : kappa_;
 }
 
-template <typename T>
-typename UnitAxis2D<T>::Matrix UnitAxis2D<T>::operator+() const
+template <typename Scalar>
+typename UnitAxis2D<Scalar>::Matrix UnitAxis2D<Scalar>::operator+() const
 {
   Matrix ret;
   ret << lambda_, -kappa_, kappa_, lambda_;
   return ret;
 }
 
-template <typename T>
-typename UnitAxis2D<T>::Matrix UnitAxis2D<T>::operator-() const
+template <typename Scalar>
+typename UnitAxis2D<Scalar>::Matrix UnitAxis2D<Scalar>::operator-() const
 {
   Matrix ret;
   ret << lambda_, kappa_, -kappa_, lambda_;
   return ret;
 }
 
-template <typename T>
-UnitAxis2D<T>& UnitAxis2D<T>::operator=(const UnitAxis2D<T>& rhs)
+template <typename Scalar>
+UnitAxis2D<Scalar>& UnitAxis2D<Scalar>::operator=(const UnitAxis2D<Scalar>& rhs)
 {
   lambda_ = rhs.lambda();
   kappa_ = rhs.kappa();
@@ -112,56 +112,56 @@ UnitAxis2D<T>& UnitAxis2D<T>::operator=(const UnitAxis2D<T>& rhs)
 
 // Non-member operators 
 
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const UnitAxis2D<T>& m)
+template <typename Scalar>
+std::ostream& operator<<(std::ostream& os, const UnitAxis2D<Scalar>& m)
 {
   os << "lambda: " << m.lambda() << ", kappa: " << m.kappa();
   return os;
 }
 
-template <typename T>
-bool operator==(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
+template <typename Scalar>
+bool operator==(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
-  T eps = std::numeric_limits<T>::epsilon();
+  Scalar eps = std::numeric_limits<Scalar>::epsilon();
   return std::abs(m.lambda() - n.lambda()) < eps && std::abs(m.kappa() - n.kappa()) < eps;
 }
 
-template <typename T>
-bool operator!=(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
+template <typename Scalar>
+bool operator!=(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   return !(m == n);
 }
 
-template <typename T>
-UnitAxis2D<T> operator*(const typename UnitAxis2D<T>::Matrix& mat, const UnitAxis2D<T>& n)
+template <typename Scalar>
+UnitAxis2D<Scalar> operator*(const typename UnitAxis2D<Scalar>::Matrix& mat, const UnitAxis2D<Scalar>& n)
 {
-  return UnitAxis2D<T>(mat * n.vector());
+  return UnitAxis2D<Scalar>(mat * n.vector());
 }
 
-template <typename T>
-double boxminus(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
+template <typename Scalar>
+Scalar boxminus(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   return (-n * m).log();
 }
 
 // Non-member functions
 
-template <typename T>
-UnitAxis2D<T> boxplus(const UnitAxis2D<T>& m, double phi)
+template <typename Scalar>
+UnitAxis2D<Scalar> boxplus(const UnitAxis2D<Scalar>& m, Scalar phi)
 {
-  return UnitAxis2D<T>(+m * UnitAxis2D<T>(phi));
+  return UnitAxis2D<Scalar>(+m * UnitAxis2D<Scalar>(phi));
 }
 
-template <typename T>
-T distance(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
+template <typename Scalar>
+Scalar distance(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   return std::acos(dot(m, n));
 }
 
-template <typename T>
-T dot(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
+template <typename Scalar>
+Scalar dot(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
-  double x = std::abs(m.lambda() * n.lambda() + m.kappa() * n.kappa());
+  Scalar x = std::abs(m.lambda() * n.lambda() + m.kappa() * n.kappa());
   return x > 1 ? 1 : x; // numerical check to ensure x <= 1.0
 }
 
@@ -169,47 +169,47 @@ T dot(const UnitAxis2D<T>& m, const UnitAxis2D<T>& n)
 // UnitAxis3D
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename T>
+template <typename Scalar>
 class UnitAxis3D
 {
 public:
-  // Typedegs
-  typedef Eigen::Matrix<T, 2, 1> Vector2;
-  typedef Eigen::Matrix<T, 3, 1> Vector3;
-  typedef Eigen::Matrix<T, 3, 3> Matrix;
+  // Typedefs
+  typedef Eigen::Matrix<Scalar, 2, 1> Vector2;
+  typedef Eigen::Matrix<Scalar, 3, 1> Vector3;
+  typedef Eigen::Matrix<Scalar, 3, 3> Matrix;
   // Constructors
-  UnitAxis3D(T, T, T);
+  UnitAxis3D(Scalar, Scalar, Scalar);
   UnitAxis3D(const Vector2&);
   UnitAxis3D() : UnitAxis3D(1, 0, 0) {}
   UnitAxis3D(const Vector3& v) : UnitAxis3D(v(0), v(1), v(2)) {}
-  UnitAxis3D(double lambda, const Vector2& kappa) : UnitAxis3D(lambda, kappa(0), kappa(1)) {}
+  UnitAxis3D(Scalar lambda, const Vector2& kappa) : UnitAxis3D(lambda, kappa(0), kappa(1)) {}
   UnitAxis3D(const UnitAxis3D& orig) : lambda_(orig.lambda_), kappa_(orig.kappa_) {}
   // Instrospection
   Vector2     direction() const {return kappa_.normalized();}
-  T           inclination() const {return std::acos(lambda_);}
+  Scalar      inclination() const {return std::acos(lambda_);}
   Vector2     kappa() const {return kappa_;}
-  T           lambda() const {return lambda_;}
+  Scalar      lambda() const {return lambda_;}
   Vector3     vector() const {return Vector3(lambda_, kappa_(0), kappa_(1));}
    // Mathematical methods
-  UnitAxis3D  inv() const {return UnitAxis3D<T>(lambda_, -kappa_);}
+  UnitAxis3D  inv() const {return UnitAxis3D<Scalar>(lambda_, -kappa_);}
   Vector2     log() const {return direction() * inclination();}
   // Operators
-  T           operator[](std::size_t) const;
+  Scalar      operator[](std::size_t) const;
   Matrix      operator+() const;
   Matrix      operator-() const;
   UnitAxis3D& operator=(const UnitAxis3D&);
 private:
-  T           lambda_;
+  Scalar      lambda_;
   Vector2     kappa_;
-  T           eps_ = std::numeric_limits<T>::epsilon();
+  Scalar      eps_ = std::numeric_limits<Scalar>::epsilon();
 };
 
 // Constructors
 
-template <typename T>
-UnitAxis3D<T>::UnitAxis3D(T lambda, T kappa_1, T kappa_2)
+template <typename Scalar>
+UnitAxis3D<Scalar>::UnitAxis3D(Scalar lambda, Scalar kappa_1, Scalar kappa_2)
 {
-  typename UnitAxis3D<T>::Vector2 kappa(kappa_1, kappa_2);
+  typename UnitAxis3D<Scalar>::Vector2 kappa(kappa_1, kappa_2);
   // Very small values are exactly zero
   lambda = std::abs(lambda) < eps_ ? 0 : lambda;
   if (kappa.norm() < 0)
@@ -224,10 +224,10 @@ UnitAxis3D<T>::UnitAxis3D(T lambda, T kappa_1, T kappa_2)
   // Ensure if lambda = 0 and kappa_1 = 0, then kappa_2 = 1
   kappa(1) = (lambda == 0 && kappa(0) == 0) ? 1 : kappa(1);
   // Normalize parameters (if required)
-  double square_sum = lambda * lambda + kappa.squaredNorm();
+  Scalar square_sum = lambda * lambda + kappa.squaredNorm();
   if (std::abs(square_sum - 1) > eps_)
   {
-    double normalizer = std::sqrt(square_sum);
+    Scalar normalizer = std::sqrt(square_sum);
     lambda_ = lambda / normalizer;
     kappa_ = kappa / normalizer;
   }
@@ -238,32 +238,32 @@ UnitAxis3D<T>::UnitAxis3D(T lambda, T kappa_1, T kappa_2)
   }
 }
 
-template <typename T>
-UnitAxis3D<T>::UnitAxis3D(const typename UnitAxis3D<T>::Vector2& phi)
+template <typename Scalar>
+UnitAxis3D<Scalar>::UnitAxis3D(const typename UnitAxis3D<Scalar>::Vector2& phi)
 {
-  double mag = phi.norm();
-  if (mag < std::numeric_limits<T>::epsilon())
+  Scalar mag = phi.norm();
+  if (mag < std::numeric_limits<Scalar>::epsilon())
   {
-    return UnitAxis3D<T>(1, 0, 0);
+    return UnitAxis3D<Scalar>(1, 0, 0);
   }
-  typename UnitAxis3D<T>::Vector2 kappa = std::sin(mag) * phi / mag;
-  return UnitAxis3D<T>(std::cos(mag), kappa(0), kappa(1));
+  typename UnitAxis3D<Scalar>::Vector2 kappa = std::sin(mag) * phi / mag;
+  return UnitAxis3D<Scalar>(std::cos(mag), kappa(0), kappa(1));
 }
 
 // Operators
 
-template <typename T>
-T UnitAxis3D<T>::operator[](std::size_t i) const
+template <typename Scalar>
+Scalar UnitAxis3D<Scalar>::operator[](std::size_t i) const
 {
   if (i != 0 && i != 1 && i != 2)
   {
-    throw std::out_of_range("UnitAxis3D<T>::operator[]");
+    throw std::out_of_range("UnitAxis3D<Scalar>::operator[]");
   }
   return i == 0 ? lambda_ : kappa_(i - 1);
 }
 
-template <typename T>
-typename UnitAxis3D<T>::Matrix UnitAxis3D<T>::operator+() const
+template <typename Scalar>
+typename UnitAxis3D<Scalar>::Matrix UnitAxis3D<Scalar>::operator+() const
 {
   Matrix ret;
   ret << lambda_, -kappa_(0), -kappa_(1), 
@@ -272,14 +272,14 @@ typename UnitAxis3D<T>::Matrix UnitAxis3D<T>::operator+() const
   return ret;
 }
 
-template <typename T>
-typename UnitAxis3D<T>::Matrix UnitAxis3D<T>::operator-() const
+template <typename Scalar>
+typename UnitAxis3D<Scalar>::Matrix UnitAxis3D<Scalar>::operator-() const
 {
   return +(this->inv());
 }
 
-template <typename T>
-UnitAxis3D<T>& UnitAxis3D<T>::operator=(const UnitAxis3D<T>& rhs)
+template <typename Scalar>
+UnitAxis3D<Scalar>& UnitAxis3D<Scalar>::operator=(const UnitAxis3D<Scalar>& rhs)
 {
   lambda_ = rhs.lambda();
   kappa_ = rhs.kappa();
@@ -288,15 +288,60 @@ UnitAxis3D<T>& UnitAxis3D<T>::operator=(const UnitAxis3D<T>& rhs)
 
 // Non-member operators
 
-// Functions acting on UnitAxis3D
-//std::ostream    &operator<<(std::ostream&, const UnitAxis3D&);
-//bool            operator==(const UnitAxis3D&, const UnitAxis3D&);
-//bool            operator!=(const UnitAxis3D&, const UnitAxis3D&);
-//UnitAxis3D      operator+(const UnitAxis3D&, const UnitAxis3D&);
-//Eigen::Vector2d boxminus(const UnitAxis3D&, const UnitAxis3D&);
-//UnitAxis3D      boxplus(const UnitAxis3D&, const Eigen::Vector3d&);
-//double          distance(const UnitAxis3D&, const UnitAxis3D&);
-//double          dot(const UnitAxis3D&, const UnitAxis3D&);
+template <typename Scalar>
+std::ostream& operator<<(std::ostream& os, const UnitAxis3D<Scalar>& m)
+{
+  os << "lambda: " << m.lambda() << ", kappa: [" << m.kappa()[0] << ", " << m.kappa()[1] << "]";
+  return os;
+}
+
+template <typename Scalar>
+bool operator==(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
+{
+  Scalar eps = std::numeric_limits<Scalar>::epsilon();
+  return std::abs(m.lambda() - n.lambda()) < eps && 
+         std::abs(m.kappa()[0] - n.kappa()[0]) < eps && 
+         std::abs(m.kappa()[1] - n.kappa()[1]) < eps;
+}
+
+template <typename Scalar>
+bool operator!=(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
+{
+  return !(m == n);
+}
+
+template <typename Scalar>
+UnitAxis3D<Scalar> operator*(const typename UnitAxis3D<Scalar>::Matrix& mat, const UnitAxis3D<Scalar>& n)
+{
+  return UnitAxis3D<Scalar>(mat * n.vector());
+}
+
+template <typename Scalar>
+typename UnitAxis3D<Scalar>::Vector2 boxminus(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
+{
+  return (-n * m).log();
+}
+
+// Non-member functions
+
+template <typename Scalar>
+UnitAxis3D<Scalar> boxplus(const UnitAxis3D<Scalar>& m, const typename UnitAxis3D<Scalar>::Vector2& phi)
+{
+  return UnitAxis2D<Scalar>(+m * UnitAxis2D<Scalar>(phi));
+}
+
+template <typename Scalar>
+Scalar distance(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
+{
+  return std::acos(dot(m, n));
+}
+
+template <typename Scalar>
+Scalar dot(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
+{
+  Scalar x = std::abs(m.lambda() * n.lambda() + m.kappa().dot(n.kappa));
+  return x > 1 ? 1 : x; // numerical check to ensure x <= 1.0
+}
 
 } // namespace axes
 
