@@ -202,6 +202,7 @@ private:
   Scalar      lambda_;
   Vector2     kappa_;
   Scalar      eps_ = std::numeric_limits<Scalar>::epsilon();
+  void        put_in_H2_(Scalar&, Vector2&);
 };
 
 // Constructors
@@ -209,45 +210,26 @@ private:
 template <typename Scalar>
 UnitAxis3D<Scalar>::UnitAxis3D(Scalar lambda, Scalar kappa_1, Scalar kappa_2)
 {
-  typename UnitAxis3D<Scalar>::Vector2 kappa(kappa_1, kappa_2);
-  // Very small values are exactly zero
-  lambda = std::abs(lambda) < eps_ ? 0 : lambda;
-  if (kappa.norm() < 0)
-  {
-    kappa.setZero();
-  }
-  // Set lambda = 1.0 if everything is zero
-  lambda = (std::abs(lambda) < eps_ && kappa.norm() < eps_) ? 1 : lambda;
-  // Change signs if lambda is negative (order here is important!)
-  kappa = lambda < 0 ? -kappa : kappa;
-  lambda = lambda < 0 ? -lambda : lambda;
-  // Ensure if lambda = 0 and kappa_1 = 0, then kappa_2 = 1
-  kappa(1) = (lambda == 0 && kappa(0) == 0) ? 1 : kappa(1);
-  // Normalize parameters (if required)
-  Scalar square_sum = lambda * lambda + kappa.squaredNorm();
-  if (std::abs(square_sum - 1) > eps_)
-  {
-    Scalar normalizer = std::sqrt(square_sum);
-    lambda_ = lambda / normalizer;
-    kappa_ = kappa / normalizer;
-  }
-  else
-  {
-    lambda_ = lambda;
-    kappa_ = kappa;
-  }
+  Vector2 kappa(kappa_1, kappa_2);
+  put_in_H2_(lambda, kappa);
+  lambda_ = lambda;
+  kappa_ = kappa;
 }
 
 template <typename Scalar>
 UnitAxis3D<Scalar>::UnitAxis3D(const typename UnitAxis3D<Scalar>::Vector2& phi)
 {
+  Scalar lambda = 1;
+  Vector2 kappa(0, 0);
   Scalar mag = phi.norm();
-  if (mag < std::numeric_limits<Scalar>::epsilon())
+  if (mag > std::numeric_limits<Scalar>::epsilon())
   {
-    return UnitAxis3D<Scalar>(1, 0, 0);
+    lambda = std::cos(mag);
+    kappa = std::sin(mag) * phi / mag;
   }
-  typename UnitAxis3D<Scalar>::Vector2 kappa = std::sin(mag) * phi / mag;
-  return UnitAxis3D<Scalar>(std::cos(mag), kappa(0), kappa(1));
+  put_in_H2_(lambda, kappa);
+  lambda_ = lambda;
+  kappa_ = kappa;
 }
 
 // Operators
@@ -284,6 +266,41 @@ UnitAxis3D<Scalar>& UnitAxis3D<Scalar>::operator=(const UnitAxis3D<Scalar>& rhs)
   lambda_ = rhs.lambda();
   kappa_ = rhs.kappa();
   return *this;
+}
+
+// Utility methods
+
+template <typename Scalar>
+void UnitAxis3D<Scalar>::put_in_H2_(Scalar& lambda, Vector2& kappa)
+{
+  // Set to exactly zero if close to zero
+  lambda = std::abs(lambda) < eps_ ? 0 : lambda;
+  if (kappa.norm() < 0)
+  {
+    kappa.setZero();
+  }
+
+  // Set lambda = 1.0 if everything is zero
+  lambda = (std::abs(lambda) < eps_ && kappa.norm() < eps_) ? 1 : lambda;
+
+  // Change signs if lambda is negative
+  if (lambda < 0)
+  {
+    kappa = -kappa;
+    lambda = -lambda;
+  }
+
+  // Ensure if lambda = 0 and kappa_1 = 0, then kappa_2 = 1
+  kappa(1) = (lambda == 0 && kappa(0) == 0) ? 1 : kappa(1);
+
+  // Normalize parameters (if required)
+  Scalar square_sum = lambda * lambda + kappa.squaredNorm();
+  if (std::abs(square_sum - 1) > eps_)
+  {
+    Scalar normalizer = std::sqrt(square_sum);
+    lambda = lambda / normalizer;
+    kappa = kappa / normalizer;
+  }
 }
 
 // Non-member operators

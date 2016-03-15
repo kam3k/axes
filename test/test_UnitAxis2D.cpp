@@ -4,7 +4,7 @@
 
 using namespace axes;
 
-TEST_CASE("Constructors")
+TEST_CASE("2D constructors")
 {
 
   SECTION("Default constructor")
@@ -98,7 +98,7 @@ TEST_CASE("Constructors")
 
 }
 
-TEST_CASE("Introspection")
+TEST_CASE("2D introspection")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
   UnitAxis2D<double> m;
@@ -139,7 +139,7 @@ TEST_CASE("Introspection")
   }
 }
 
-TEST_CASE("Mathematical methods")
+TEST_CASE("2D mathematical methods")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
   UnitAxis2D<double> m;
@@ -164,7 +164,7 @@ TEST_CASE("Mathematical methods")
   }
 }
 
-TEST_CASE("Operators")
+TEST_CASE("2D operators")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
   UnitAxis2D<double> m;
@@ -245,7 +245,7 @@ TEST_CASE("Operators")
   }
 }
 
-TEST_CASE("Functions")
+TEST_CASE("2D functions")
 {
   const double pi = 3.141592653589793238462643383279502884;
   UnitAxis2D<double> m;
