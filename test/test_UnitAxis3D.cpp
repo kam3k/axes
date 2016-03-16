@@ -71,30 +71,50 @@ TEST_CASE("3D constructors")
     REQUIRE(c.lambda() == Approx(0.0));
     REQUIRE(c.kappa()[0] == Approx(0.0));
     REQUIRE(c.kappa()[1] == Approx(1.0));
+
+    UnitAxis3D<double> d(Eigen::Vector2d(pi/3, -pi/3));
+    REQUIRE(d.lambda() == Approx(0.08971456178219864));
+    REQUIRE(d.kappa()[0] == Approx(0.704255));
+    REQUIRE(d.kappa()[1] == Approx(-0.704255));
+
+    UnitAxis3D<double> e(Eigen::Vector2d(-1.3, 2.4));
+    REQUIRE(e.lambda() == Approx(0.9162721722720432));
+    REQUIRE(e.kappa()[0] == Approx(0.19077819007809607));
+    REQUIRE(e.kappa()[1] == Approx(-0.35220588937494657));
   }
 
-  SECTION("2-vector constructor")
+  SECTION("3-vector constructor")
   {
-    Eigen::Vector2d u(1.0, 1.0);
-    UnitAxis2D<double> a(u);
+    UnitAxis3D<double> a(Eigen::Vector3d(1.0, 1.0, 0.0));
     REQUIRE(a.lambda() == Approx(std::sqrt(2.0) / 2.0));
-    REQUIRE(a.kappa() == Approx(std::sqrt(2.0) / 2.0));
+    REQUIRE(a.kappa()[0] == Approx(std::sqrt(2.0) / 2.0));
+    REQUIRE(a.kappa()[1] == 0.0);
 
-    Eigen::Vector2d v(0.0, 0.0);
-    UnitAxis2D<double> b(v);
-    REQUIRE(b.lambda() == 1.0);
-    REQUIRE(b.kappa() == 0.0);
+    UnitAxis3D<double> b(Eigen::Vector3d(-1.0, 1.0, 0.0));
+    REQUIRE(b.lambda() == Approx(std::sqrt(2.0) / 2.0));
+    REQUIRE(b.kappa()[0] == Approx(-std::sqrt(2.0) / 2.0));
+    REQUIRE(b.kappa()[1] == 0.0);
+
+    UnitAxis3D<double> c(Eigen::Vector3d(0.0, 0.0, -1.0));
+    REQUIRE(c.lambda() == 0.0);
+    REQUIRE(c.kappa()[0] == 0.0);
+    REQUIRE(c.kappa()[1] == 1.0);
+
+    UnitAxis3D<double> d(Eigen::Vector3d(0.0, 0.0, 0.0));
+    REQUIRE(d.lambda() == 1.0);
+    REQUIRE(d.kappa()[0] == 0.0);
+    REQUIRE(d.kappa()[1] == 0.0);
   }
 
   SECTION("Copy constructor")
   {
-    UnitAxis2D<double> a(1.0, 1.0);
-    UnitAxis2D<double> b(a);
+    UnitAxis3D<double> a(1.0, 1.0, 1.0);
+    UnitAxis3D<double> b(a);
     REQUIRE(a.lambda() == b.lambda());
     REQUIRE(a.kappa() == b.kappa());
 
-    UnitAxis2D<double> c(-1.0, 4.32);
-    UnitAxis2D<double> d(c);
+    UnitAxis3D<double> c(-1.0, 4.32, -7.11);
+    UnitAxis3D<double> d(c);
     REQUIRE(c.lambda() == d.lambda());
     REQUIRE(c.kappa() == d.kappa());
   }
@@ -104,22 +124,30 @@ TEST_CASE("3D constructors")
 TEST_CASE("3D introspection")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
-  UnitAxis2D<double> m;
-  UnitAxis2D<double> n(1.0, 1.0);
-  UnitAxis2D<double> p(0.0, -1.0);
+  UnitAxis3D<double> m;
+  UnitAxis3D<double> n(1.0, 1.0, 0.0);
+  UnitAxis3D<double> p(0.0, 0.0, -1.0);
 
-  SECTION("Angle")
+  SECTION("Direction")
   {
-    REQUIRE(m.angle() == Approx(0.0));
-    REQUIRE(n.angle() == Approx(pi/4.0));
-    REQUIRE(p.angle() == Approx(pi/2.0));
+    REQUIRE(m.direction() == Eigen::Vector2d(1, 0));
+    REQUIRE(n.direction() == Eigen::Vector2d(1, 0));
+    REQUIRE(p.direction() == Eigen::Vector2d(0, 1));
+  }
+
+  SECTION("Inclination")
+  {
+    REQUIRE(m.inclination() == Approx(0.0));
+    REQUIRE(n.inclination() == Approx(pi/4.0));
+    REQUIRE(p.inclination() == Approx(pi/2.0));
   }
 
   SECTION("Kappa")
   {
-    REQUIRE(m.kappa() == 0.0);
-    REQUIRE(n.kappa() == Approx(std::sqrt(2.0)/2));
-    REQUIRE(p.kappa() == 1.0);
+    REQUIRE(m.kappa() == Eigen::Vector2d(0, 0));
+    REQUIRE(n.kappa()[0] == Approx(std::sqrt(2)/2));
+    REQUIRE(n.kappa()[1] == 0.0);
+    REQUIRE(p.kappa() == Eigen::Vector2d(0, 1));
   }
 
   SECTION("Lambda")
@@ -131,13 +159,14 @@ TEST_CASE("3D introspection")
 
   SECTION("Vector")
   {
-    Eigen::Vector2d m_vec(1.0, 0.0);
-    Eigen::Vector2d n_vec(std::sqrt(2.0)/2, std::sqrt(2.0)/2);
-    Eigen::Vector2d p_vec(0.0, 1.0);
+    Eigen::Vector3d m_vec(1.0, 0.0, 0.0);
+    Eigen::Vector3d n_vec(std::sqrt(2)/2, std::sqrt(2)/2, 0.0);
+    Eigen::Vector3d p_vec(0.0, 0.0, 1.0);
 
     REQUIRE(m.vector() == m_vec);
     REQUIRE(n.vector()[0] == Approx(n_vec[0]));
     REQUIRE(n.vector()[1] == Approx(n_vec[1]));
+    REQUIRE(n.vector()[2] == Approx(n_vec[2]));
     REQUIRE(p.vector() == p_vec);
   }
 }
@@ -145,25 +174,28 @@ TEST_CASE("3D introspection")
 TEST_CASE("3D mathematical methods")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
-  UnitAxis2D<double> m;
-  UnitAxis2D<double> n(1.0, 1.0);
-  UnitAxis2D<double> p(0.0, -1.0);
-  UnitAxis2D<double> q(2.3, -3.7);
+  UnitAxis3D<double> m;
+  UnitAxis3D<double> n(1.0, 1.0, 1.0);
+  UnitAxis3D<double> p(0.0, 0.0, -1.0);
+  UnitAxis3D<double> q(2.3, -3.7, -44.31);
 
   SECTION("Inv")
   {
-    REQUIRE(m.inv() == UnitAxis2D<double>(1.0, 0.0));
-    REQUIRE(n.inv() == UnitAxis2D<double>(1.0, -1.0));
-    REQUIRE(p.inv() == UnitAxis2D<double>(0.0, 1.0));
-    REQUIRE(q.inv() == UnitAxis2D<double>(2.3, 3.7));
+    REQUIRE(m.inv() == UnitAxis3D<double>(1.0, 0.0, 0.0));
+    REQUIRE(n.inv() == UnitAxis3D<double>(1.0, -1.0, -1.0));
+    REQUIRE(p.inv() == UnitAxis3D<double>(0.0, 0.0, 1.0));
+    REQUIRE(q.inv() == UnitAxis3D<double>(2.3, 3.7, 44.31));
   }
 
   SECTION("Log")
   {
-    REQUIRE(m.log() == Approx(0.0));
-    REQUIRE(n.log() == Approx(pi/4.0));
-    REQUIRE(p.log() == Approx(pi/2.0));
-    REQUIRE(q.log() == Approx(-1.014630096674437));
+    REQUIRE(m.log() == Eigen::Vector2d(0, 0));
+    REQUIRE(n.log()[0] == Approx(0.67551085885604));
+    REQUIRE(n.log()[1] == Approx(0.67551085885604));
+    REQUIRE(p.log()[0] == 0.0);
+    REQUIRE(p.log()[1] == Approx(pi/2));
+    REQUIRE(q.log()[0] == Approx(-0.12641013466187973));
+    REQUIRE(q.log()[1] == Approx(-1.5138467748291597));
   }
 }
 

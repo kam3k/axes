@@ -26,6 +26,7 @@ public:
   UnitAxis2D(const Vector v) : UnitAxis2D(v(0), v(1)) {}
   UnitAxis2D(const UnitAxis2D& orig) : lambda_(orig.lambda_), kappa_(orig.kappa_) {}
   // Introspection
+  /* Returns the angle of the UnitAxis */
   Scalar      angle() const {return std::atan(kappa_ / lambda_);}
   Scalar      kappa() const {return kappa_;}
   Scalar      lambda() const {return lambda_;}
@@ -185,7 +186,7 @@ public:
   UnitAxis3D(Scalar lambda, const Vector2& kappa) : UnitAxis3D(lambda, kappa(0), kappa(1)) {}
   UnitAxis3D(const UnitAxis3D& orig) : lambda_(orig.lambda_), kappa_(orig.kappa_) {}
   // Instrospection
-  Vector2     direction() const {return kappa_.normalized();}
+  Vector2     direction() const {return kappa_.norm() > eps_ ? kappa_.normalized() : Vector2(1, 0);}
   Scalar      inclination() const {return std::acos(lambda_);}
   Vector2     kappa() const {return kappa_;}
   Scalar      lambda() const {return lambda_;}
