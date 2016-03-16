@@ -250,8 +250,8 @@ typename UnitAxis3D<Scalar>::Matrix UnitAxis3D<Scalar>::operator+() const
 {
   Matrix ret;
   ret << lambda_, -kappa_(0), -kappa_(1), 
-         kappa(0), lambda_ + 1/(lambda_+1) * kappa(1) * kappa(1), -1/(kappa(0) * kappa(1)),
-         kappa(1), lambda_ + 1/(lambda_+1) * kappa(0) * kappa(0), -1/(kappa(0) * kappa(1));
+         kappa_(0), lambda_ + 1/(lambda_+1) * kappa_(1) * kappa_(1), -1/(lambda_+1) * kappa_(0) * kappa_(1),
+         kappa_(1), -1/(lambda_+1) * kappa_(0) * kappa_(1), lambda_ + 1/(lambda_+1) * kappa_(0) * kappa_(0);
   return ret;
 }
 

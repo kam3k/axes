@@ -202,32 +202,36 @@ TEST_CASE("3D mathematical methods")
 TEST_CASE("3D operators")
 {
   const long double pi = 3.141592653589793238462643383279502884L;
-  UnitAxis2D<double> m;
-  UnitAxis2D<double> n(1.0, 1.0);
-  UnitAxis2D<double> p(0.0, -1.0);
+  UnitAxis3D<double> m;
+  UnitAxis3D<double> n(1.0, 1.0, 0.0);
+  UnitAxis3D<double> p(0.0, 0.0, -1.0);
 
   SECTION("Indexing")
   {
     REQUIRE(m[0] == 1.0);
     REQUIRE(m[1] == 0.0);
+    REQUIRE(m[2] == 0.0);
     REQUIRE(n[0] == Approx(std::sqrt(2.0)/2));
     REQUIRE(n[1] == Approx(std::sqrt(2.0)/2));
+    REQUIRE(n[2] == 0.0);
     REQUIRE(p[0] == 0.0);
-    REQUIRE(p[1] == 1.0);
+    REQUIRE(p[1] == 0.0);
+    REQUIRE(p[2] == 1.0);
   }
 
   SECTION("+ compound")
   {
-    Eigen::Matrix2d m_plus;
-    m_plus << m.lambda(), -m.kappa(), m.kappa(), m.lambda();
-    Eigen::Matrix2d n_plus;
-    n_plus << n.lambda(), -n.kappa(), n.kappa(), n.lambda();
-    Eigen::Matrix2d p_plus;
-    p_plus << p.lambda(), -p.kappa(), p.kappa(), p.lambda();
+    Eigen::Matrix3d m_plus;
+    m_plus << 1, 0, 0, 0, 1, 0, 0, 0, 1;
+    Eigen::Matrix3d n_plus;
+    n_plus << std::sqrt(2)/2, -std::sqrt(2)/2, 0, std::sqrt(2)/2, std::sqrt(2)/2, 0, 0, 0, 1;
+    Eigen::Matrix3d p_plus;
+    p_plus << 0, 0, 0, 0, 1, 0, 0, 0, 0;
 
-    Eigen::Matrix2d m_plus_calc = +m;
-    Eigen::Matrix2d n_plus_calc = +n;
-    Eigen::Matrix2d p_plus_calc = +p;
+
+    Eigen::Matrix3d m_plus_calc = +m;
+    Eigen::Matrix3d n_plus_calc = +n;
+    Eigen::Matrix3d p_plus_calc = +p;
     REQUIRE(m_plus_calc(0, 0) == Approx(m_plus(0, 0)));
     REQUIRE(m_plus_calc(1, 0) == Approx(m_plus(1, 0)));
     REQUIRE(m_plus_calc(0, 1) == Approx(m_plus(0, 1)));
@@ -244,16 +248,16 @@ TEST_CASE("3D operators")
 
   SECTION("- compound")
   {
-    Eigen::Matrix2d m_minus;
-    m_minus << m.lambda(), m.kappa(), -m.kappa(), m.lambda();
-    Eigen::Matrix2d n_minus;
-    n_minus << n.lambda(), n.kappa(), -n.kappa(), n.lambda();
-    Eigen::Matrix2d p_minus;
-    p_minus << p.lambda(), p.kappa(), -p.kappa(), p.lambda();
+    Eigen::Matrix3d m_minus;
+    m_minus << 1, 0, 0, 0, 1, 0, 0, 0, 1;
+    Eigen::Matrix3d n_minus;
+    n_minus << std::sqrt(2)/2, std::sqrt(2)/2, 0, -std::sqrt(2)/2, std::sqrt(2)/2, 0, 0, 0, 1;
+    Eigen::Matrix3d p_minus;
+    p_minus << 0, 0, 0, 0, 1, 0, 0, 0, 0;
 
-    Eigen::Matrix2d m_minus_calc = -m;
-    Eigen::Matrix2d n_minus_calc = -n;
-    Eigen::Matrix2d p_minus_calc = -p;
+    Eigen::Matrix3d m_minus_calc = -m;
+    Eigen::Matrix3d n_minus_calc = -n;
+    Eigen::Matrix3d p_minus_calc = -p;
     REQUIRE(m_minus_calc(0, 0) == Approx(m_minus(0, 0)));
     REQUIRE(m_minus_calc(1, 0) == Approx(m_minus(1, 0)));
     REQUIRE(m_minus_calc(0, 1) == Approx(m_minus(0, 1)));
@@ -270,13 +274,13 @@ TEST_CASE("3D operators")
 
   SECTION("Assignment")
   {
-    m = UnitAxis2D<double>(4.3, -1.1);
-    n = UnitAxis2D<double>(-1.3, -11.9);
-    p = UnitAxis2D<double>(7.2, 4.8);
+    m = UnitAxis3D<double>(4.3, -1.1, 7.4);
+    n = UnitAxis3D<double>(-1.3, -11.9, 1.1);
+    p = UnitAxis3D<double>(7.2, 4.8, 9.9);
 
-    REQUIRE(m == UnitAxis2D<double>(4.3, -1.1));
-    REQUIRE(n == UnitAxis2D<double>(-1.3, -11.9));
-    REQUIRE(p == UnitAxis2D<double>(7.2, 4.8));
+    REQUIRE(m == UnitAxis3D<double>(4.3, -1.1, 7.4));
+    REQUIRE(n == UnitAxis3D<double>(-1.3, -11.9, 1.1));
+    REQUIRE(p == UnitAxis3D<double>(7.2, 4.8, 9.9));
   }
 }
 
