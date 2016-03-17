@@ -12,7 +12,7 @@ namespace axes
 // UnitAxis2D
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename Scalar>
+template <typename Scalar = double>
 class UnitAxis2D
 {
 public:
@@ -113,33 +113,33 @@ UnitAxis2D<Scalar>& UnitAxis2D<Scalar>::operator=(const UnitAxis2D<Scalar>& rhs)
 
 // Non-member operators 
 
-template <typename Scalar>
+template <typename Scalar = double>
 std::ostream& operator<<(std::ostream& os, const UnitAxis2D<Scalar>& m)
 {
   os << "lambda: " << m.lambda() << ", kappa: " << m.kappa();
   return os;
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 bool operator==(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   Scalar eps = std::numeric_limits<Scalar>::epsilon();
   return std::abs(m.lambda() - n.lambda()) < eps && std::abs(m.kappa() - n.kappa()) < eps;
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 bool operator!=(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   return !(m == n);
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 UnitAxis2D<Scalar> operator*(const typename UnitAxis2D<Scalar>::Matrix& mat, const UnitAxis2D<Scalar>& n)
 {
   return UnitAxis2D<Scalar>(mat * n.vector());
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 Scalar boxminus(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   return (-n * m).log();
@@ -147,19 +147,19 @@ Scalar boxminus(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 
 // Non-member functions
 
-template <typename Scalar>
+template <typename Scalar = double>
 UnitAxis2D<Scalar> boxplus(const UnitAxis2D<Scalar>& m, Scalar phi)
 {
   return UnitAxis2D<Scalar>(+m * UnitAxis2D<Scalar>(phi));
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 Scalar distance(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   return std::acos(dot(m, n));
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 Scalar dot(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 {
   Scalar x = std::abs(m.lambda() * n.lambda() + m.kappa() * n.kappa());
@@ -170,7 +170,7 @@ Scalar dot(const UnitAxis2D<Scalar>& m, const UnitAxis2D<Scalar>& n)
 // UnitAxis3D
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename Scalar>
+template <typename Scalar = double>
 class UnitAxis3D
 {
 public:
@@ -306,14 +306,14 @@ void UnitAxis3D<Scalar>::put_in_H2_(Scalar& lambda, Vector2& kappa)
 
 // Non-member operators
 
-template <typename Scalar>
+template <typename Scalar = double>
 std::ostream& operator<<(std::ostream& os, const UnitAxis3D<Scalar>& m)
 {
   os << "lambda: " << m.lambda() << ", kappa: [" << m.kappa()[0] << ", " << m.kappa()[1] << "]";
   return os;
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 bool operator==(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
 {
   Scalar eps = std::numeric_limits<Scalar>::epsilon();
@@ -322,19 +322,20 @@ bool operator==(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
          std::abs(m.kappa()[1] - n.kappa()[1]) < eps;
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 bool operator!=(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
 {
   return !(m == n);
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 UnitAxis3D<Scalar> operator*(const typename UnitAxis3D<Scalar>::Matrix& mat, const UnitAxis3D<Scalar>& n)
 {
-  return UnitAxis3D<Scalar>(mat * n.vector());
+  typename UnitAxis3D<Scalar>::Vector3 vec(mat * n.vector());
+  return UnitAxis3D<Scalar>(vec);
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 typename UnitAxis3D<Scalar>::Vector2 boxminus(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
 {
   return (-n * m).log();
@@ -342,19 +343,19 @@ typename UnitAxis3D<Scalar>::Vector2 boxminus(const UnitAxis3D<Scalar>& m, const
 
 // Non-member functions
 
-template <typename Scalar>
+template <typename Scalar = double>
 UnitAxis3D<Scalar> boxplus(const UnitAxis3D<Scalar>& m, const typename UnitAxis3D<Scalar>::Vector2& phi)
 {
   return UnitAxis3D<Scalar>(+m * UnitAxis3D<Scalar>(phi));
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 Scalar distance(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
 {
   return std::acos(dot(m, n));
 }
 
-template <typename Scalar>
+template <typename Scalar = double>
 Scalar dot(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
 {
   Scalar x = std::abs(m.lambda() * n.lambda() + m.kappa().dot(n.kappa));

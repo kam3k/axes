@@ -287,17 +287,17 @@ TEST_CASE("3D operators")
 TEST_CASE("3D functions")
 {
   const double pi = 3.141592653589793238462643383279502884;
-  UnitAxis2D<double> m;
-  UnitAxis2D<double> n(1.0, 1.0);
-  UnitAxis2D<double> p(0.0, -1.0);
-  UnitAxis2D<double> q(std::sqrt(3.0)/2, 0.5);
-  UnitAxis2D<double> r(0.5, -std::sqrt(3.0)/2);
+  UnitAxis3D<double> m;
+  UnitAxis3D<double> n(1.0, 1.0, 0.0);
+  UnitAxis3D<double> p(0.0, 0.0, -1.0);
+  UnitAxis3D<double> q(std::sqrt(3.0)/2, 0.5, 0);
+  UnitAxis3D<double> r(0.0, 0.5, -std::sqrt(3.0)/2);
 
   SECTION("Equivalency operators")
   {
-    UnitAxis2D<double> s;
-    UnitAxis2D<double> t(1.0, 1.0);
-    UnitAxis2D<double> u(0.0, -1.0);
+    UnitAxis3D<double> s;
+    UnitAxis3D<double> t(1.0, 1.0, 0.0);
+    UnitAxis3D<double> u(0.0, 0.0, -1.0);
 
     REQUIRE(m == m);
     REQUIRE(m == s);
@@ -314,87 +314,87 @@ TEST_CASE("3D functions")
 
   SECTION("Axis product")
   {
-    REQUIRE(+m * UnitAxis2D<double>() == m); 
-    REQUIRE(+n * UnitAxis2D<double>() == n); 
-    REQUIRE(+p * UnitAxis2D<double>() == p); 
-    REQUIRE(+q * q == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
-    REQUIRE(+q * r == UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
-    REQUIRE(+r * q == UnitAxis2D<double>(std::sqrt(3.0)/2, -0.5));
-    REQUIRE(+q * +r * q == UnitAxis2D<double>());
-    REQUIRE(+r * +q * q == UnitAxis2D<double>());
-    REQUIRE(+r * r == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
+    REQUIRE(+m * UnitAxis3D<double>() == m); 
+    REQUIRE(+n * UnitAxis3D<double>() == n); 
+    REQUIRE(+p * UnitAxis3D<double>() == p); 
+    REQUIRE(+q * q == UnitAxis3D<double>(0.5, std::sqrt(3.0)/2, 0));
+    REQUIRE(+q * r == UnitAxis3D<double>(0.25, -0.43301270189221935, 0.8660254037844387));
+    REQUIRE(+r * q == UnitAxis3D<double>(0.25, -0.8080127018922195, 0.5334936490538903));
+    REQUIRE(+q * +r * q == UnitAxis3D<double>(0.6205127018922194, -0.5747595264191646, 0.5334936490538902));
+    REQUIRE(+r * +q * q == UnitAxis3D<double>(0.4330127018922193, -0.899519052838329, 0.05801270189221916));
+    REQUIRE(+r * r == UnitAxis3D<double>());
 
-    REQUIRE(-m * UnitAxis2D<double>() == m.inv()); 
-    REQUIRE(-n * UnitAxis2D<double>() == n.inv()); 
-    REQUIRE(-p * UnitAxis2D<double>() == p.inv()); 
-    REQUIRE(-q * q == UnitAxis2D<double>());
-    REQUIRE(-q * r == UnitAxis2D<double>(0, 1));
-    REQUIRE(-r * q == UnitAxis2D<double>(0, 1));
-    REQUIRE(-q * -r * q == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
-    REQUIRE(-r * -q * q == UnitAxis2D<double>(0.5, std::sqrt(3.0)/2));
-    REQUIRE(-r * r == UnitAxis2D<double>());
+    REQUIRE(-m * UnitAxis3D<double>() == m.inv()); 
+    REQUIRE(-n * UnitAxis3D<double>() == n.inv()); 
+    REQUIRE(-p * UnitAxis3D<double>() == p.inv()); 
+    REQUIRE(-q * q == UnitAxis3D<double>());
+    REQUIRE(-q * r == UnitAxis3D<double>(0.25, 0.43301270189221935, -0.8660254037844387));
+    REQUIRE(-r * q == UnitAxis3D<double>(0.25, -0.058012701892219395, 0.9665063509461096));
+    REQUIRE(-r * +r * q == q);
+    REQUIRE(-r * -q * q == r.inv());
+    REQUIRE(-r * r == UnitAxis3D<double>());
   }
 
-  SECTION("Boxminus")
-  {
-    REQUIRE(boxminus(m, m) == Approx(0));
-    REQUIRE(boxminus(n, n) == Approx(0));
-    REQUIRE(boxminus(q, r) == Approx(pi/2));
-    REQUIRE(boxminus(r, q) == Approx(pi/2));
-    REQUIRE(boxminus(p, q) == Approx(pi/3));
-    REQUIRE(boxminus(q, p) == Approx(-pi/3));
-    REQUIRE(boxminus(n, r) == Approx(7*pi/12 - pi));
-    REQUIRE(boxminus(r, n) == Approx(-7*pi/12 + pi));
-  }
+  //SECTION("Boxminus")
+  //{
+  //  REQUIRE(boxminus(m, m) == Approx(0));
+  //  REQUIRE(boxminus(n, n) == Approx(0));
+  //  REQUIRE(boxminus(q, r) == Approx(pi/2));
+  //  REQUIRE(boxminus(r, q) == Approx(pi/2));
+  //  REQUIRE(boxminus(p, q) == Approx(pi/3));
+  //  REQUIRE(boxminus(q, p) == Approx(-pi/3));
+  //  REQUIRE(boxminus(n, r) == Approx(7*pi/12 - pi));
+  //  REQUIRE(boxminus(r, n) == Approx(-7*pi/12 + pi));
+  //}
 
-  SECTION("Boxplus")
-  {
-    REQUIRE(boxplus(m, 0.0) == m);
-    REQUIRE(boxplus(m, pi/4) == n);
-    REQUIRE(boxplus(m, -pi/3) == r);
-    REQUIRE(boxplus(q, -pi/2) == r);
-    REQUIRE(boxplus(r, pi/2) == q);
-  }
+  //SECTION("Boxplus")
+  //{
+  //  REQUIRE(boxplus(m, 0.0) == m);
+  //  REQUIRE(boxplus(m, pi/4) == n);
+  //  REQUIRE(boxplus(m, -pi/3) == r);
+  //  REQUIRE(boxplus(q, -pi/2) == r);
+  //  REQUIRE(boxplus(r, pi/2) == q);
+  //}
 
-  SECTION("Manifold axioms")
-  {
-    REQUIRE(boxplus(m, 0.0) == m);
-    REQUIRE(boxplus(r, boxminus(q, r)) == q);
-    REQUIRE(boxplus(n, boxminus(r, n)) == r);
-    REQUIRE(boxminus(boxplus(q, 0.55), q) == Approx(0.55));
-    REQUIRE(boxminus(boxplus(r, -0.32), r) == Approx(-0.32));
-  }
+  //SECTION("Manifold axioms")
+  //{
+  //  REQUIRE(boxplus(m, 0.0) == m);
+  //  REQUIRE(boxplus(r, boxminus(q, r)) == q);
+  //  REQUIRE(boxplus(n, boxminus(r, n)) == r);
+  //  REQUIRE(boxminus(boxplus(q, 0.55), q) == Approx(0.55));
+  //  REQUIRE(boxminus(boxplus(r, -0.32), r) == Approx(-0.32));
+  //}
 
-  SECTION("Distance")
-  {
-    REQUIRE(distance(m, n) == Approx(pi/4));
-    REQUIRE(distance(n, m) == Approx(pi/4));
-    REQUIRE(distance(q, r) == Approx(pi/2));
-    REQUIRE(distance(r, q) == Approx(pi/2));
-    REQUIRE(distance(m, m) == Approx(0));
-    REQUIRE(distance(n, n) == Approx(0));
-    REQUIRE(distance(q, r) == Approx(pi/2));
-    REQUIRE(distance(r, q) == Approx(pi/2));
-    REQUIRE(distance(p, q) == Approx(pi/3));
-    REQUIRE(distance(q, p) == Approx(pi/3));
-    REQUIRE(distance(n, r) == Approx(pi - 7*pi/12));
-    REQUIRE(distance(r, n) == Approx(pi - 7*pi/12));
-  }
+  //SECTION("Distance")
+  //{
+  //  REQUIRE(distance(m, n) == Approx(pi/4));
+  //  REQUIRE(distance(n, m) == Approx(pi/4));
+  //  REQUIRE(distance(q, r) == Approx(pi/2));
+  //  REQUIRE(distance(r, q) == Approx(pi/2));
+  //  REQUIRE(distance(m, m) == Approx(0));
+  //  REQUIRE(distance(n, n) == Approx(0));
+  //  REQUIRE(distance(q, r) == Approx(pi/2));
+  //  REQUIRE(distance(r, q) == Approx(pi/2));
+  //  REQUIRE(distance(p, q) == Approx(pi/3));
+  //  REQUIRE(distance(q, p) == Approx(pi/3));
+  //  REQUIRE(distance(n, r) == Approx(pi - 7*pi/12));
+  //  REQUIRE(distance(r, n) == Approx(pi - 7*pi/12));
+  //}
 
-  SECTION("Dot")
-  {
-    REQUIRE(dot(m, n) == Approx(std::cos(pi/4)));
-    REQUIRE(dot(n, m) == Approx(std::cos(pi/4)));
-    REQUIRE(dot(q, r) == Approx(std::cos(pi/2)));
-    REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
-    REQUIRE(dot(m, m) == Approx(std::cos(0)));
-    REQUIRE(dot(n, n) == Approx(std::cos(0)));
-    REQUIRE(dot(q, r) == Approx(std::cos(pi/2)));
-    REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
-    REQUIRE(dot(p, q) == Approx(std::cos(pi/3)));
-    REQUIRE(dot(q, p) == Approx(std::cos(pi/3)));
-    REQUIRE(dot(n, r) == Approx(std::cos(pi - 7*pi/12)));
-    REQUIRE(dot(r, n) == Approx(std::cos(pi - 7*pi/12)));
-  }
+  //SECTION("Dot")
+  //{
+  //  REQUIRE(dot(m, n) == Approx(std::cos(pi/4)));
+  //  REQUIRE(dot(n, m) == Approx(std::cos(pi/4)));
+  //  REQUIRE(dot(q, r) == Approx(std::cos(pi/2)));
+  //  REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
+  //  REQUIRE(dot(m, m) == Approx(std::cos(0)));
+  //  REQUIRE(dot(n, n) == Approx(std::cos(0)));
+  //  REQUIRE(dot(q, r) == Approx(std::cos(pi/2)));
+  //  REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
+  //  REQUIRE(dot(p, q) == Approx(std::cos(pi/3)));
+  //  REQUIRE(dot(q, p) == Approx(std::cos(pi/3)));
+  //  REQUIRE(dot(n, r) == Approx(std::cos(pi - 7*pi/12)));
+  //  REQUIRE(dot(r, n) == Approx(std::cos(pi - 7*pi/12)));
+  //}
 }
 
