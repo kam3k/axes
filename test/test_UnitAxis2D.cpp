@@ -334,8 +334,6 @@ TEST_CASE("2D functions")
     REQUIRE(distance(r, q) == Approx(pi/2));
     REQUIRE(distance(m, m) == Approx(0));
     REQUIRE(distance(n, n) == Approx(0));
-    REQUIRE(distance(q, r) == Approx(pi/2));
-    REQUIRE(distance(r, q) == Approx(pi/2));
     REQUIRE(distance(p, q) == Approx(pi/3));
     REQUIRE(distance(q, p) == Approx(pi/3));
     REQUIRE(distance(n, r) == Approx(pi - 7*pi/12));
@@ -350,8 +348,6 @@ TEST_CASE("2D functions")
     REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
     REQUIRE(dot(m, m) == Approx(std::cos(0)));
     REQUIRE(dot(n, n) == Approx(std::cos(0)));
-    REQUIRE(dot(q, r) == Approx(std::cos(pi/2)));
-    REQUIRE(dot(r, q) == Approx(std::cos(pi/2)));
     REQUIRE(dot(p, q) == Approx(std::cos(pi/3)));
     REQUIRE(dot(q, p) == Approx(std::cos(pi/3)));
     REQUIRE(dot(n, r) == Approx(std::cos(pi - 7*pi/12)));

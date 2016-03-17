@@ -358,7 +358,7 @@ Scalar distance(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
 template <typename Scalar = double>
 Scalar dot(const UnitAxis3D<Scalar>& m, const UnitAxis3D<Scalar>& n)
 {
-  Scalar x = std::abs(m.lambda() * n.lambda() + m.kappa().dot(n.kappa));
+  Scalar x = std::abs(m.lambda() * n.lambda() + m.kappa().dot(n.kappa()));
   return x > 1 ? 1 : x; // numerical check to ensure x <= 1.0
 }
 
