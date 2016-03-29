@@ -12,6 +12,9 @@ TEST_CASE("2D constructors")
     UnitAxis2D<double> m;
     REQUIRE(m.lambda() == 1.0);
     REQUIRE(m.kappa() == 0.0);
+    UnitAxis2D<long> n;
+    REQUIRE(n.lambda() == 1.0L);
+    REQUIRE(n.kappa() == 0.0L);
   }
 
   SECTION("Two parameter constructor")
