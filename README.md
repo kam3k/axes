@@ -207,6 +207,9 @@ dot(p, q); // cos(PI/3)
 dot(r, n); // cos(PI - 7*PI/12)
 ```
 
+### Three-Dimensional Axes
+(coming soon)
+
 ## Issues and Contact
 
 If you discover any problems, I'd appreciate if you submitted them via the issue tracker. Pull requests are certainly welcome! Otherwise, you can find my contact info on my website linked at the beginning of this README.
