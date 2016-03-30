@@ -42,12 +42,12 @@ int main()
 
 I also cheat and assume the constant `PI` and function `sqrt` are defined.
 	
-### Two-Dimensional Axes
-A two-dimensional axis is the 2x1 column
+### Two-Dimensional Unit Axes
+A two-dimensional unit axis is the 2x1 column
 
 **m** = [&lambda; &kappa;]<sup>T</sup>
 
-Two-dimensional axes are analogous to numbers in the complex plane (with real part &lambda; and imaginary part &kappa;), with the condition **m** = –**m**. The *angle* of **m** is its angle with respect to the &kappa; (imaginary) axis. Numerous examples of the different methods and functions that act on two-dimensional axes are shown here. 
+Two-dimensional unit axes are analogous to numbers in the complex plane (with real part &lambda; and imaginary part &kappa;), with the condition **m** = –**m**. The *angle* of **m** is its angle with respect to the &kappa; (imaginary) axis. Numerous examples of the different methods and functions that act on two-dimensional unit axes are shown here. 
 
 #### Constructors
 
@@ -207,8 +207,45 @@ dot(p, q); // cos(PI/3)
 dot(r, n); // cos(PI - 7*PI/12)
 ```
 
-### Three-Dimensional Axes
-(coming soon)
+### Three-Dimensional Unit Axes
+A three-dimensional unit axis is the 3x1 column
+
+**m** = [&lambda; **&kappa;**<sup>T</sup>]<sup>T</sup>
+
+Three-dimensional unit axes are points on the unit sphere S<sup>2</sup>, with the condition **m** = –**m**. The *inclination* &phi; and direction **r** of a three-dimensional unit axis is
+
+&phi; = cos<sup>-1</sup>(&lambda;), **r** = **&kappa;** / ||**&kappa;**||,
+
+and the *axis vector* **&phi;** parameterization of a unit axis is 
+
+**&phi;** = &phi;**r**.
+
+Numerous examples of different methods and functions that act on three-dimensional unit axes are shown here. 
+
+#### Constructors
+```cpp
+// Default constructor
+UnitAxi3D<double> m; // [1.0, 0.0, 0.0]
+UnitAxis3D<> m; // same as above (defaults to double)
+UnitAxis3D<long> m; // [1.0L, 0.0L, 0.0L]
+
+// Three parameter constructor
+UnitAxis3D<> m(1, 0, 0); // [1.0, 0.0, 0.0]
+UnitAxis3D<> m(1, 1, 1); // [sqrt(3)/3, sqrt(3)/3, sqrt(3)/3] (normalizes arguments)
+
+// Axis vector constructor
+UnitAxis3D<> m(Eigen::Vector2d(0, 0)) // [1.0, 0.0, 0.0]
+UnitAxis3D<> m(Eigen::Vector2d(PI/2, 0)) // [0.0, 1.0, 0.0]
+UnitAxis3D<> m(Eigen::Vector2d(PI/3, -PI/3)) // [0.0897..., 0.7042..., -0.7042...]
+
+// 3-vector constructor
+Eigen::Vector2d u(1, 1, 1);
+UnitAxis3D<> m(u) // same as UnitAxis3D<> m(1, 1, 1)
+
+// Copy constructor
+UnitAxis3D<> m(1, 1, 1);
+UnitAxis3D<> n(m); // [sqrt(3)/3, sqrt(3)/3, sqrt(3)/3]
+```
 
 ## Issues and Contact
 
