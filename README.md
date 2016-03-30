@@ -78,7 +78,7 @@ UnitAxis2D<> m(1, 1);
 UnitAxis2D<> n(m); // [sqrt(2)/2, sqrt(2)/2]
 ```
 
-### Introspective methods
+#### Introspective methods
 
 ```cpp
 UnitAxis2D<> m;
@@ -106,7 +106,7 @@ n.vector(); // Eigen::Vector2d(sqrt(2)/2, sqrt(2)/2)
 p.vector(); // Eigen::Vector2d(0, 1)
 ```
 
-### Mathematical methods
+#### Mathematical methods
 
 ```cpp
 UnitAxis2D<> m;
@@ -127,7 +127,7 @@ p.log(); // PI/2
 q.log(); // -1.01463...
 ```
 
-### Operators
+#### Operators
 
 ```cpp
 UnitAxis2D<> m;
@@ -169,7 +169,7 @@ m == n // false
 m != n // true
 ```
 
-### Functions
+#### Functions
 
 ```cpp
 UnitAxis2D<> m;
