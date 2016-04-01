@@ -246,6 +246,59 @@ UnitAxis3D<> m(u) // same as UnitAxis3D<> m(1, 1, 1)
 UnitAxis3D<> m(1, 1, 1);
 UnitAxis3D<> n(m); // [sqrt(3)/3, sqrt(3)/3, sqrt(3)/3]
 ```
+#### Introspective methods
+
+```cpp
+UnitAxis3D<> m;
+UnitAxis3D<> n(1, 1, 0);
+UnitAxis3D<> p(0, 0, -1);
+
+// Direction
+m.direction(); // Eigen::Vector2d(1, 0)
+n.direction(); // Eigen::Vector2d(1, 0)
+p.direction(); // Eigen::Vector2d(0, 1)
+
+// Inclination
+m.inclination(); // 0.0
+n.inclination(); // PI/4
+p.inclination(); // PI/2
+
+// Kappa
+m.kappa(); // Eigen::Vector2d(0, 0)
+n.kappa(); // Eigen::Vector2d(sqrt(2)/2, 0)
+p.kappa(); // Eigen::Vector2d(0, 1)
+
+// Lambda
+m.lambda(); // 1.0
+n.lambda(); // sqrt(2)/2
+p.lambda(); // 0.0
+
+// Vector
+m.vector(); // Eigen::Vector3d(1, 0, 0)
+n.vector(); // Eigen::Vector3d(sqrt(2)/2, sqrt(2)/2, 0.0)
+p.vector(); // Eigen::Vector3d(0, 0, 1)
+```
+
+#### Mathematical methods
+
+```cpp
+UnitAxis3D<> m;
+UnitAxis3D<> n(1, 1, 1);
+UnitAxis3D<> p(0, 0, -1);
+UnitAxis3D<> q(2.3, -3.7, -44.31);
+
+// Inverse
+m.inv(); // [1.0, 0.0, 0.0]
+n.inv(); // [sqrt(3)/3, -sqrt(3)/3, -sqrt(3)/3]
+p.inv(); // [0.0, 0.0, 1.0]
+q.inv(); // [0.0516..., 0.0831..., 0.9952...]
+
+// Log (axis vector)
+m.log(); // Eigen::Vector2d(0, 0)
+n.log(); // Eigen::Vector2d(0.6755..., 0.6755...)
+p.log(); // Eigen::Vector2d(0, PI/2)
+q.log(); // Eigen::Vector2d(-0.1264..., -1.5138...)
+```
 
 ## Issues and Contact
 
