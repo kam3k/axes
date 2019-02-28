@@ -226,24 +226,42 @@ TEST_CASE("3D operators")
     Eigen::Matrix3d n_plus;
     n_plus << std::sqrt(2)/2, -std::sqrt(2)/2, 0, std::sqrt(2)/2, std::sqrt(2)/2, 0, 0, 0, 1;
     Eigen::Matrix3d p_plus;
-    p_plus << 0, 0, 0, 0, 1, 0, 0, 0, 0;
+    p_plus << 0, 0, -1, 0, 1, 0, 1, 0, 0;
 
 
     Eigen::Matrix3d m_plus_calc = +m;
     Eigen::Matrix3d n_plus_calc = +n;
     Eigen::Matrix3d p_plus_calc = +p;
+
     REQUIRE(m_plus_calc(0, 0) == Approx(m_plus(0, 0)));
     REQUIRE(m_plus_calc(1, 0) == Approx(m_plus(1, 0)));
+    REQUIRE(m_plus_calc(2, 0) == Approx(m_plus(2, 0)));
     REQUIRE(m_plus_calc(0, 1) == Approx(m_plus(0, 1)));
     REQUIRE(m_plus_calc(1, 1) == Approx(m_plus(1, 1)));
+    REQUIRE(m_plus_calc(2, 1) == Approx(m_plus(2, 1)));
+    REQUIRE(m_plus_calc(0, 2) == Approx(m_plus(0, 2)));
+    REQUIRE(m_plus_calc(1, 2) == Approx(m_plus(1, 2)));
+    REQUIRE(m_plus_calc(2, 2) == Approx(m_plus(2, 2)));
+
     REQUIRE(n_plus_calc(0, 0) == Approx(n_plus(0, 0)));
     REQUIRE(n_plus_calc(1, 0) == Approx(n_plus(1, 0)));
+    REQUIRE(n_plus_calc(2, 0) == Approx(n_plus(2, 0)));
     REQUIRE(n_plus_calc(0, 1) == Approx(n_plus(0, 1)));
     REQUIRE(n_plus_calc(1, 1) == Approx(n_plus(1, 1)));
+    REQUIRE(n_plus_calc(2, 1) == Approx(n_plus(2, 1)));
+    REQUIRE(n_plus_calc(0, 2) == Approx(n_plus(0, 2)));
+    REQUIRE(n_plus_calc(1, 2) == Approx(n_plus(1, 2)));
+    REQUIRE(n_plus_calc(2, 2) == Approx(n_plus(2, 2)));
+
     REQUIRE(p_plus_calc(0, 0) == Approx(p_plus(0, 0)));
     REQUIRE(p_plus_calc(1, 0) == Approx(p_plus(1, 0)));
+    REQUIRE(p_plus_calc(2, 0) == Approx(p_plus(2, 0)));
     REQUIRE(p_plus_calc(0, 1) == Approx(p_plus(0, 1)));
     REQUIRE(p_plus_calc(1, 1) == Approx(p_plus(1, 1)));
+    REQUIRE(p_plus_calc(2, 1) == Approx(p_plus(2, 1)));
+    REQUIRE(p_plus_calc(0, 2) == Approx(p_plus(0, 2)));
+    REQUIRE(p_plus_calc(1, 2) == Approx(p_plus(1, 2)));
+    REQUIRE(p_plus_calc(2, 2) == Approx(p_plus(2, 2)));
   }
 
   SECTION("- compound")
@@ -253,23 +271,41 @@ TEST_CASE("3D operators")
     Eigen::Matrix3d n_minus;
     n_minus << std::sqrt(2)/2, std::sqrt(2)/2, 0, -std::sqrt(2)/2, std::sqrt(2)/2, 0, 0, 0, 1;
     Eigen::Matrix3d p_minus;
-    p_minus << 0, 0, 0, 0, 1, 0, 0, 0, 0;
+    p_minus << 0, 0, -1, 0, 1, 0, 1, 0, 0;
 
     Eigen::Matrix3d m_minus_calc = -m;
     Eigen::Matrix3d n_minus_calc = -n;
     Eigen::Matrix3d p_minus_calc = -p;
+
     REQUIRE(m_minus_calc(0, 0) == Approx(m_minus(0, 0)));
     REQUIRE(m_minus_calc(1, 0) == Approx(m_minus(1, 0)));
+    REQUIRE(m_minus_calc(2, 0) == Approx(m_minus(2, 0)));
     REQUIRE(m_minus_calc(0, 1) == Approx(m_minus(0, 1)));
     REQUIRE(m_minus_calc(1, 1) == Approx(m_minus(1, 1)));
+    REQUIRE(m_minus_calc(2, 1) == Approx(m_minus(2, 1)));
+    REQUIRE(m_minus_calc(0, 2) == Approx(m_minus(0, 2)));
+    REQUIRE(m_minus_calc(1, 2) == Approx(m_minus(1, 2)));
+    REQUIRE(m_minus_calc(2, 2) == Approx(m_minus(2, 2)));
+
     REQUIRE(n_minus_calc(0, 0) == Approx(n_minus(0, 0)));
     REQUIRE(n_minus_calc(1, 0) == Approx(n_minus(1, 0)));
+    REQUIRE(n_minus_calc(2, 0) == Approx(n_minus(2, 0)));
     REQUIRE(n_minus_calc(0, 1) == Approx(n_minus(0, 1)));
     REQUIRE(n_minus_calc(1, 1) == Approx(n_minus(1, 1)));
+    REQUIRE(n_minus_calc(2, 1) == Approx(n_minus(2, 1)));
+    REQUIRE(n_minus_calc(0, 2) == Approx(n_minus(0, 2)));
+    REQUIRE(n_minus_calc(1, 2) == Approx(n_minus(1, 2)));
+    REQUIRE(n_minus_calc(2, 2) == Approx(n_minus(2, 2)));
+
     REQUIRE(p_minus_calc(0, 0) == Approx(p_minus(0, 0)));
     REQUIRE(p_minus_calc(1, 0) == Approx(p_minus(1, 0)));
+    REQUIRE(p_minus_calc(2, 0) == Approx(p_minus(2, 0)));
     REQUIRE(p_minus_calc(0, 1) == Approx(p_minus(0, 1)));
     REQUIRE(p_minus_calc(1, 1) == Approx(p_minus(1, 1)));
+    REQUIRE(p_minus_calc(2, 1) == Approx(p_minus(2, 1)));
+    REQUIRE(p_minus_calc(0, 2) == Approx(p_minus(0, 2)));
+    REQUIRE(p_minus_calc(1, 2) == Approx(p_minus(1, 2)));
+    REQUIRE(p_minus_calc(2, 2) == Approx(p_minus(2, 2)));
   }
 
   SECTION("Assignment")

@@ -3,11 +3,7 @@ project(axes)
 set(CMAKE_CXX_STANDARD 11) # set standard to c++11
 
 # Find Eigen3
-set(ENV{EIGEN3_INCLUDE_DIR} "/usr/local/include/eigen3")
-set(EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}")
-if(NOT EIGEN3_INCLUDE_DIR)
-    message(FATAL_ERROR "Please point the environment variable EIGEN3_INCLUDE_DIR to the include directory of your Eigen3 installation.")
-ENDIF()
+find_package(Eigen3 REQUIRED)
 
 # Include directories
 include_directories(include ${EIGEN3_INCLUDE_DIR})
